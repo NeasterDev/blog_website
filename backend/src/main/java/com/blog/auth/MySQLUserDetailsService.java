@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.blog.Models.AppUser;
+import com.blog.Models.BlogPost;
+import com.blog.Repositories.BlogPostRepository;
 import com.blog.Repositories.UserRepository;
 
 @Service
@@ -46,6 +50,19 @@ public class MySQLUserDetailsService implements UserDetailsService {
         AppUser savedUser = userRepository.save(newUser);
         // return a new User with the information from the user passed in
         return new User(savedUser.getUsername(), savedUser.getPassword(), getAuthorities());
+    }
+
+    public void saveBlogPost(String username, BlogPost blogPost) throws UsernameNotFoundException {
+        // Find the user by the username
+        AppUser foundUser = userRepository.findByUsername(username);
+        // Set the current list of posts to a variable
+        List<BlogPost> posts = foundUser.getPosts();
+        // add the new blog post to the list of posts
+        posts.add(blogPost);
+        // set the posts of the user to the updated post list
+        foundUser.setPosts(posts);
+        // save the updated user to the db
+        userRepository.save(foundUser); // this is what actually updates all the data in the database
     }
     
     // helper method to provide a list of authorities the user would have assoiciated

@@ -5,6 +5,8 @@ import "./App.css";
 import Home from "./components/Home";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Register from "./components/Register";
+import BlogPost from "./components/BlogPost";
+import RenderBlogPosts from "./components/RenderBlogPosts";
 
 class App extends React.Component {
   // Constructor for app component
@@ -92,7 +94,9 @@ class App extends React.Component {
     if (localStorage.getItem("token")) {
       this.setState({ ...this.state, token: localStorage.getItem("token")});
     }
-
+    if (localStorage.getItem("username")) {
+      this.setState({ ...this.state, username: localStorage.getItem("username")});
+    }
   }
 
   // when the component updates, check if there is a new token and save it to localStorage 
@@ -100,13 +104,25 @@ class App extends React.Component {
     if (this.state.token !== prevState.token) {
       localStorage.setItem("token", this.state.token);
     }
+    if (this.state.username !== prevState.username) {
+      localStorage.setItem("username", this.state.token);
+    }
   }
 
   render() {
     return (
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
+        <Route
+            path="/"
+            element={
+              !this.state.token || !this.state.token === "" ? (
+                <Navigate replace to="/login" />
+              ) : (
+                <Home />
+              )
+            }
+          />
           <Route
             path="/login"
             element={
@@ -133,6 +149,8 @@ class App extends React.Component {
               />
             }
           />
+          <Route path="/createpost" element={<BlogPost username={this.state.username}/>} />
+          <Route path="/blogposts" element={<RenderBlogPosts />} />
         </Routes>
       </div>
     );
