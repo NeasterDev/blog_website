@@ -1,13 +1,53 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  --bg-color: #d5f0d1;
+  --bg-color-2: #bad1b6;
+  font-family: 'Josefin Sans', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root, body {
+  background-color: var(--bg-color);
+  min-height: 100vh;
+}
+
+.nav {
+  border-bottom: 1px solid black;
+  background-color: #f8f9fa;
+  box-shadow: -2px 1.5px;
+}
+
+.c-nav-link {
+  font-size: larger;
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
+  border-right: .5px solid var(--bg-color-2);
+  padding: .5rem 1rem;
+  background-color: #f8f9fa;
+}
+
+.nav-link-focus:focus, .nav-link-focus:hover {
+  background-color: var(--bg-color-2);
+
+}
+
+.login {
+  background-color: var(--bg-color-2);
+  padding: .5rem 2rem;
+  border-radius: 5px;
+  box-shadow: -8px 6px;
+}
+
+.card {
+  min-height: 10rem;
+  max-height: 10rem;
+}
+
+.card-body {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-body p {
+  overflow: hidden;
+  height: fit-content;
 }

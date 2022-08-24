@@ -7,6 +7,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 import BlogPost from "./components/BlogPost";
 import RenderBlogPosts from "./components/RenderBlogPosts";
+import Nav from "./components/Nav";
 
 class App extends React.Component {
   // Constructor for app component
@@ -56,26 +57,32 @@ class App extends React.Component {
       });
   };
 
+  // saves a new user to the database
   onRegister = () => {
-    console.log("Register called");
-    console.log(this.state.username);
+    // fetch request to save user to db
     fetch("http://localhost:8080/api/user/register", {
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", // this header does not need the JWT
       },
-      method: "POST",
+      method: "POST", // tells the server that this is a post request
       body: JSON.stringify({
-        username: this.state.username,
+        username: this.state.username, // sends the username and password from state, to the server
         password: this.state.password,
       }),
-    }).then(res => {
+    }).then((res) => {
       if (res.ok) {
+        // if the response was ok, take them to the login page
         window.location.href = "/login";
       } else {
-        this.setState({ ...this.state, error: "Error creating user. You may have already created an account."})
+        // if it wasnt ok, set the error message
+        this.setState({
+          ...this.state,
+          error:
+            "Error creating user. You may have already created an account.",
+        });
       }
-    })
+    });
   };
 
   // When the username text field changes
@@ -92,14 +99,17 @@ class App extends React.Component {
   // sets the token to token saved in local storage if there is one
   componentDidMount() {
     if (localStorage.getItem("token")) {
-      this.setState({ ...this.state, token: localStorage.getItem("token")});
+      this.setState({ ...this.state, token: localStorage.getItem("token") });
     }
     if (localStorage.getItem("username")) {
-      this.setState({ ...this.state, username: localStorage.getItem("username")});
+      this.setState({
+        ...this.state,
+        username: localStorage.getItem("username"),
+      });
     }
   }
 
-  // when the component updates, check if there is a new token and save it to localStorage 
+  // when the component updates, check if there is a new token and save it to localStorage
   componentDidUpdate(prevProps, prevState) {
     if (this.state.token !== prevState.token) {
       localStorage.setItem("token", this.state.token);
@@ -111,47 +121,68 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Routes>
-        <Route
-            path="/"
-            element={
-              !this.state.token || !this.state.token === "" ? (
-                <Navigate replace to="/login" />
-              ) : (
-                <Home />
-              )
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              !this.state.token || !this.state.token === "" ? (
-                <Login
+      <div className="text-center">
+        <Nav />
+        <div className="container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                !this.state.token || !this.state.token === "" ? (
+                  <Navigate replace to="/login" />
+                ) : (
+                  <Home />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                !this.state.token || !this.state.token === "" ? (
+                  <Login
+                    onUsernameChange={this.onUsernameChange}
+                    onPasswordChange={this.onPasswordChange}
+                    onLogin={this.onLogin}
+                    error={this.state.error}
+                  />
+                ) : (
+                  <Navigate replace to="/" />
+                )
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Register
                   onUsernameChange={this.onUsernameChange}
                   onPasswordChange={this.onPasswordChange}
-                  onLogin={this.onLogin}
+                  onRegister={this.onRegister}
                   error={this.state.error}
                 />
-              ) : (
-                <Navigate replace to="/" />
-              )
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <Register
-                onUsernameChange={this.onUsernameChange}
-                onPasswordChange={this.onPasswordChange}
-                onRegister={this.onRegister}
-                error={this.state.error}
-              />
-            }
-          />
-          <Route path="/createpost" element={<BlogPost username={this.state.username}/>} />
-          <Route path="/blogposts" element={<RenderBlogPosts />} />
-        </Routes>
+              }
+            />
+            <Route
+              path="/createpost"
+              element={
+                !this.state.token || !this.state.token === "" ? (
+                  <Navigate replace to="/" />
+                ) : (
+                  <BlogPost username={this.state.username} />
+                )
+              }
+            />
+            <Route
+              path="/blogposts"
+              element={
+                !this.state.token || !this.state.token === "" ? (
+                  <Navigate replace to="/" />
+                ) : (
+                  <RenderBlogPosts />
+                )
+              }
+            />
+          </Routes>
+        </div>
       </div>
     );
   }
