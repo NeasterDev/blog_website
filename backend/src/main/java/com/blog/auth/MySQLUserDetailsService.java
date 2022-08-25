@@ -52,7 +52,7 @@ public class MySQLUserDetailsService implements UserDetailsService {
         return new User(savedUser.getUsername(), savedUser.getPassword(), getAuthorities());
     }
 
-    public void saveBlogPost(String username, BlogPost blogPost) throws UsernameNotFoundException {
+    public AppUser saveBlogPost(String username, BlogPost blogPost) throws UsernameNotFoundException {
         // Find the user by the username
         AppUser foundUser = userRepository.findByUsername(username);
         // Set the current list of posts to a variable
@@ -62,7 +62,11 @@ public class MySQLUserDetailsService implements UserDetailsService {
         // set the posts of the user to the updated post list
         foundUser.setPosts(posts);
         // save the updated user to the db
-        userRepository.save(foundUser); // this is what actually updates all the data in the database
+        return userRepository.save(foundUser); // this is what actually updates all the data in the database
+    }
+
+    public AppUser getCurrentUser(String username) {
+        return userRepository.findByUsername(username);
     }
     
     // helper method to provide a list of authorities the user would have assoiciated
@@ -72,5 +76,9 @@ public class MySQLUserDetailsService implements UserDetailsService {
         List<SimpleGrantedAuthority> authList = new ArrayList<>();
         authList.add(new SimpleGrantedAuthority("ROLE_USER"));
         return authList;
+    }
+
+    public List<AppUser> getUsers() {
+        return userRepository.findAll();
     }
 }

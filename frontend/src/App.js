@@ -8,6 +8,8 @@ import Register from "./components/Register";
 import BlogPost from "./components/BlogPost";
 import RenderBlogPosts from "./components/RenderBlogPosts";
 import Nav from "./components/Nav";
+import ViewSinglePost from "./components/ViewSinglePost";
+import UserPosts from "./components/UserPosts";
 
 class App extends React.Component {
   // Constructor for app component
@@ -18,6 +20,7 @@ class App extends React.Component {
       token: "",
       username: "",
       password: "",
+      id: "",
       error: "",
     };
   }
@@ -98,6 +101,17 @@ class App extends React.Component {
 
   // sets the token to token saved in local storage if there is one
   componentDidMount() {
+    fetch("http://localhost:8080/api/user/current", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+      method: "GET"
+    }).then(res => res.json())
+    .then(data => { console.log(data) 
+      return this.setState({ ...this.state, username: data.username})})
+
     if (localStorage.getItem("token")) {
       this.setState({ ...this.state, token: localStorage.getItem("token") });
     }
@@ -122,8 +136,9 @@ class App extends React.Component {
   render() {
     return (
       <div className="text-center">
-        <Nav />
+        <Nav/>
         <div className="container">
+          {this.state.username ? <h3 className="mt-2">Welcome <span id="logged-in-user">{this.state.username}</span></h3> : null}
           <Routes>
             <Route
               path="/"
@@ -177,10 +192,11 @@ class App extends React.Component {
                 !this.state.token || !this.state.token === "" ? (
                   <Navigate replace to="/" />
                 ) : (
-                  <RenderBlogPosts />
+                  <UserPosts />
                 )
               }
             />
+            <Route path="/blogposts/:username/:id/:entry" element={<ViewSinglePost loggedInUser={this.state.username}/>} /> {/*useParams to get the value of id */}
           </Routes>
         </div>
       </div>

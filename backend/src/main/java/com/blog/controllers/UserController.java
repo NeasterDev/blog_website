@@ -1,8 +1,11 @@
 package com.blog.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.Models.AppUser;
 import com.blog.Models.BlogPost;
 import com.blog.auth.MySQLUserDetailsService;
+
+
 
 @RestController
 @RequestMapping("/api/user")
@@ -39,6 +44,24 @@ public class UserController {
         // This removes the authentication from the user
         // in the context of spring. i.e logs them out
         SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
+    @GetMapping("/users")
+    public List<AppUser> getUsers() {
+        return userService.getUsers();
+    }
+    
+    @GetMapping("/current")
+    public AppUser getCurrentUser() {
+        // gets the current logged in username from spring
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getCurrentUser(username);
+    }
+
+    @PostMapping("/compareuser")
+    public boolean compareCurrentUser(@RequestBody String usernameToCompare) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return username == usernameToCompare;
     }
 
 }

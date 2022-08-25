@@ -45,7 +45,7 @@ export default class Nav extends React.Component {
           </li>
           <li className="nav-item" role="presentation">
             <Link to="/blogposts">
-              <button className="c-nav-link nav-link-focus">View post</button>
+              <button className="c-nav-link nav-link-focus">View your posts</button>
             </Link>
           </li>
           <li className="nav-item" role="presentation">

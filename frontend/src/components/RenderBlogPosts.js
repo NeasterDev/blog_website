@@ -16,7 +16,7 @@ export default class RenderBlogPosts extends React.Component {
   // method to retreive all blog posts from the database
   getBlogPosts = async () => {
     // fetch the server to retreive data from database
-    const posts = await fetch("http://localhost:8080/api/blog/posts", {
+    const posts = await fetch("http://localhost:8080/api/user/users", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -26,8 +26,34 @@ export default class RenderBlogPosts extends React.Component {
     })
       .then((res) => res.json()) // set the response to json
       .then((data) => {
-        console.log(data);
-        this.setState({ ...this.state, blogPosts: data }); // set the blog post state as the data retreived from the server
+        //console.log(data);
+        let blogPosts = [];
+        data.forEach(user => {
+          const username = user.username;
+          user.posts.forEach((post, index) => {
+            blogPosts.push({
+              title: post.title,
+              content: post.content,
+              entry: index + 1,
+              username: username,
+              post_id: post.post_id,
+              date: post.date
+            })
+          });
+        });
+        console.log(blogPosts);
+        // blogPosts = blogPosts[0];
+        // console.log(blogPosts);
+        blogPosts.sort(function(a,b){
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b.date) - new Date(a.date);
+        });
+        // blogPosts.forEach(post => {
+        //   let date = post.date.split("T");
+        //   console.log(date);
+        // })
+        this.setState({ ...this.state, blogPosts: blogPosts }); // set the blog post state as the data retreived from the server
       });
     return posts;
   };
@@ -42,9 +68,10 @@ export default class RenderBlogPosts extends React.Component {
     return (
       <div className="mt-2 row">
         {this.state.blogPosts ? (
-          this.state.blogPosts.reverse().map((post, index) => (
-            <BlogCard title={post.title} content={post.content} key={index}/>
-          ))
+          this.state.blogPosts.map((post, index) => {
+            return (
+            <BlogCard title={post.title} content={post.content} post_id={post.post_id} username={post.username} entry={post.entry} date={post.date.split("T", 1)} key={index}/>
+          )})
         ) : (
           <div>No Posts</div>
         )}
