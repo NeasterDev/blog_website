@@ -24,7 +24,7 @@ public class MySQLUserDetailsService implements UserDetailsService {
     // Instantiates the class with Autowired
     @Autowired
     // access to our user repository
-    private UserRepository userRepository; 
+    private UserRepository userRepository;
     @Autowired
     // Used to encode the password
     private PasswordEncoder passwordEncoder;
@@ -65,11 +65,34 @@ public class MySQLUserDetailsService implements UserDetailsService {
         return userRepository.save(foundUser); // this is what actually updates all the data in the database
     }
 
+    public AppUser updateBlogPost(String username, BlogPost blogPost, String postId) {
+        // Find the user by the username
+        AppUser foundUser = userRepository.findByUsername(username);
+        List<BlogPost> posts = foundUser.getPosts();
+        for (BlogPost post : posts) {
+            System.out.println(post);
+            System.out.println(postId);
+            if (post.getPost_id() == Long.parseLong(postId)) {
+                System.out.println(true);
+                post.setTitle(blogPost.getTitle());
+                post.setContent(blogPost.getContent());
+                foundUser.setPosts(posts);
+                return userRepository.save(foundUser);
+            }
+        }
+        return foundUser;
+    }
+
     public AppUser getCurrentUser(String username) {
         return userRepository.findByUsername(username);
     }
-    
-    // helper method to provide a list of authorities the user would have assoiciated
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    // helper method to provide a list of authorities the user would have
+    // assoiciated
     // with their account
     // Gives every logged in user an authority of "ROLE_USER"
     private List<SimpleGrantedAuthority> getAuthorities() {

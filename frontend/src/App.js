@@ -107,20 +107,12 @@ class App extends React.Component {
         "Content-Type": "application/json",
         Authorization: localStorage.getItem("token"),
       },
-      method: "GET"
-    }).then(res => res.json())
-    .then(data => { console.log(data) 
-      return this.setState({ ...this.state, username: data.username})})
-
-    if (localStorage.getItem("token")) {
-      this.setState({ ...this.state, token: localStorage.getItem("token") });
-    }
-    if (localStorage.getItem("username")) {
-      this.setState({
-        ...this.state,
-        username: localStorage.getItem("username"),
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        return this.setState({ ...this.state, token: localStorage.getItem("token"),  username: data.username });
       });
-    }
   }
 
   // when the component updates, check if there is a new token and save it to localStorage
@@ -129,16 +121,20 @@ class App extends React.Component {
       localStorage.setItem("token", this.state.token);
     }
     if (this.state.username !== prevState.username) {
-      localStorage.setItem("username", this.state.token);
+      localStorage.setItem("username", this.state.username);
     }
   }
 
   render() {
     return (
       <div className="text-center">
-        <Nav/>
+        <Nav />
         <div className="container">
-          {this.state.username ? <h3 className="mt-2">Welcome <span id="logged-in-user">{this.state.username}</span></h3> : null}
+          {this.state.username ? (
+            <h3 className="mt-2">
+              Welcome <span id="logged-in-user">{this.state.username}</span>
+            </h3>
+          ) : null}
           <Routes>
             <Route
               path="/"
@@ -196,7 +192,11 @@ class App extends React.Component {
                 )
               }
             />
-            <Route path="/blogposts/:username/:id/:entry" element={<ViewSinglePost loggedInUser={this.state.username}/>} /> {/*useParams to get the value of id */}
+            <Route
+              path="/blogposts/:username/:id/:entry"
+              element={<ViewSinglePost loggedInUser={this.state.username} />}
+            />{" "}
+            {/*useParams to get the value of id */}
           </Routes>
         </div>
       </div>

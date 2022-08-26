@@ -41,7 +41,6 @@ export default class RenderBlogPosts extends React.Component {
             })
           });
         });
-        console.log(blogPosts);
         // blogPosts = blogPosts[0];
         // console.log(blogPosts);
         blogPosts.sort(function(a,b){
@@ -60,7 +59,6 @@ export default class RenderBlogPosts extends React.Component {
 
   // When the component is mounted
   componentDidMount() {
-    console.log("Component Mounted");
     this.getBlogPosts(); // retreive the blog posts from the database
   }
 

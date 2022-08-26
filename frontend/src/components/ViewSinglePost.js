@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // made this a function based class so that I could use useParams()
-const ViewSinglePost = ({loggedInUser}) => {
-  console.log(loggedInUser)
+const ViewSinglePost = ({ loggedInUser }) => {
   const { id, username, entry } = useParams(); // gets the id from the url parameter
 
   const [title, setTitle] = useState("");
@@ -13,8 +12,12 @@ const ViewSinglePost = ({loggedInUser}) => {
   const [stateUsername, setStateUsername] = useState(username);
   const [blogEntryNumber, setBlogEntryNumber] = useState(entry);
 
-  const [loggedInUserState, setLoggedInUserState] =  useState(loggedInUser)
+  const [loggedInUserState, setLoggedInUserState] = useState(loggedInUser);
   const [isUserPost, setUserPost] = useState(false);
+
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [editMsg, setEditMsg] = useState("");
 
   const getSingleBlogPost = () => {
     fetch(`http://localhost:8080/api/blog/${postId}`, {
@@ -42,24 +45,101 @@ const ViewSinglePost = ({loggedInUser}) => {
   }, []);
 
   const editPost = () => {
-    
-  }
+    if (isEdit) {
+      setIsEdit(false);
+      fetch(`http://localhost:8080/api/user/updatepost/${postId}`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          content,
+        }),
+      }).then((res) => {
+        if (res.ok) {
+          setEditMsg("Edit Success!");
+        } else {
+          setEditMsg("Something went wrong...");
+        }
+      });
+    } else {
+      setIsEdit(true);
+      if (editMsg) {
+        setEditMsg("");
+      }
+    }
+  };
+
+  const deletePost = () => {
+    fetch(`http://localhost:8080/api/blog/${postId}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+      method: "DELETE",
+    }).then((res) => {
+      if (res.ok) {
+        setEditMsg("Deleted!");
+      } else {
+        setEditMsg("Something went wrong...");
+      }
+    });
+  };
 
   return (
     <div className="container">
       {/* <button onClick={getSingleBlogPost}>Click</button> */}
       <div className="single-post">
         <div className="single-post-title">
-          <h1>{title}</h1>
+          {isEdit ? (
+            <input
+              className="form-control"
+              type="text"
+              onChange={(e) => setTitle(e.target.value)}
+              defaultValue={title}
+            />
+          ) : (
+            <h1>{title}</h1>
+          )}
         </div>
-        <p>{content}</p>
+        {isEdit ? (
+          <textarea
+            className="form-control"
+            onChange={(e) => setContent(e.target.value)}
+            defaultValue={content}
+          />
+        ) : (
+          <div className="content">
+            <p>{content}</p>
+          </div>
+        )}
       </div>
       <div className="d-flex justify-content-between">
         <div>
           Blog entry #{blogEntryNumber} from {stateUsername}
         </div>
         <div>
-          {isUserPost ? <button className="btn btn-danger" onClick={editPost}>Edit</button> : null}
+          {isUserPost ? (
+            <div className="d-flex">
+              <div className="mx-2">
+                <button
+                  className={isEdit ? "btn btn-success" : "btn btn-warning"}
+                  onClick={editPost}
+                >
+                  {isEdit ? "Complete Edit" : "Edit"}
+                </button>
+              </div>
+              <div className="mx-2">
+                <button className="btn btn-danger" onClick={deletePost}>Delete</button>
+              </div>
+              <br />
+              {editMsg}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

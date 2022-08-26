@@ -57,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.applyPermitDefaultValues();
+        corsConfig.applyPermitDefaultValues(); // default requests are only GET and POST
+        corsConfig.addAllowedMethod(CorsConfiguration.ALL); // adds PUT and DELETE methods to allows requests
         corsConfig.setExposedHeaders(Arrays.asList("Authorization")); // exposes the authorization header which cors does not allow by default
 
         source.registerCorsConfiguration("/**", corsConfig); // registers all routes in the application to use this configuration

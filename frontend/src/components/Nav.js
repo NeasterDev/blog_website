@@ -19,36 +19,40 @@ export default class Nav extends React.Component {
         })
     }
 
+    componentDidMount() {
+
+    }
+
   render() {
     return (
       <nav>
-        <ul className="nav" id="myTab" role="tablist">
-          <li className="nav-item" role="presentation">
+        <ul className="nav">
+          <li className="nav-item">
             <Link to="/">
               <button className="c-nav-link nav-link-focus">Home</button>
             </Link>
           </li>
-          <li className="nav-item" role="presentation">
+          <li className="nav-item">
             <Link to="/login">
               <button className="c-nav-link nav-link-focus">Login</button>
             </Link>
           </li>
-          <li className="nav-item" role="presentation">
+          <li className="nav-item" >
             <Link to="/register">
               <button className="c-nav-link nav-link-focus">Register</button>
             </Link>
           </li>
-          <li className="nav-item" role="presentation">
+          <li className="nav-item">
             <Link to="/createpost">
               <button className="c-nav-link nav-link-focus">Create post</button>
             </Link>
           </li>
-          <li className="nav-item" role="presentation">
+          <li className="nav-item">
             <Link to="/blogposts">
               <button className="c-nav-link nav-link-focus">View your posts</button>
             </Link>
           </li>
-          <li className="nav-item" role="presentation">
+          <li className="nav-item">
             <button className="c-nav-link nav-link-focus" onClick={this.logout}>Logout</button>
           </li>
         </ul>
