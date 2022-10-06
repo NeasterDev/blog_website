@@ -9,11 +9,21 @@ This site allows users to create an account, create posts that can be viewed by 
 
 ## Table of Contents
 
+* [Technologies](#technologies)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Contributing](#contributing)
+* [Screenshots](#screenshots)
 * [License](#license)
 
+
+## Technologies
+
+- Java
+- Spring Boot
+- MySQL
+- React
+- Bootstrap
 
 ## Installation
 
