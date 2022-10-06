@@ -19,10 +19,6 @@ export default class Nav extends React.Component {
         })
     }
 
-    componentDidMount() {
-
-    }
-
   render() {
     return (
       <nav>

@@ -12,6 +12,7 @@ export default class UserPosts extends React.Component {
         }
     }
 
+    // Get the logged in users posts
     getCurrentUserPosts = () => {
         fetch("http://localhost:8080/api/user/current", {
             headers: {
@@ -28,6 +29,7 @@ export default class UserPosts extends React.Component {
         })
     }
 
+    // delete the current users account
     deleteCurrentUser = () => {
         fetch(`http://localhost:8080/api/user/${this.state.id}`, {
             headers: {
@@ -43,6 +45,7 @@ export default class UserPosts extends React.Component {
         })
     }
 
+    // gets the current users posts when the component renders
     componentDidMount(){
         this.getCurrentUserPosts();
     }
@@ -52,6 +55,7 @@ export default class UserPosts extends React.Component {
             <div>
                 <h1>Your posts</h1>
                 <div className="mt-2 row">
+                    {/* returns a blogcard for each of the users posts */}
                     {this.state.posts.map((post,index) => {
                         return (
                             <BlogCard title={post.title} content={post.content} post_id={post.post_id} username={this.state.username} entry={index + 1} date={post.date.split("T", 1)} key={index}/>

@@ -19,6 +19,7 @@ const ViewSinglePost = ({ loggedInUser }) => {
 
   const [editMsg, setEditMsg] = useState("");
 
+  // retreive blog post from the server/db
   const getSingleBlogPost = () => {
     fetch(`http://localhost:8080/api/blog/${postId}`, {
       headers: {
@@ -35,6 +36,7 @@ const ViewSinglePost = ({ loggedInUser }) => {
       });
   };
 
+  //checks if the post they are viewing is the current users
   useEffect(() => {
     getSingleBlogPost();
     if (loggedInUserState.toString() === username.toString()) {
@@ -44,6 +46,7 @@ const ViewSinglePost = ({ loggedInUser }) => {
     }
   }, []);
 
+  // fetch route to edit post
   const editPost = () => {
     if (isEdit) {
       setIsEdit(false);
