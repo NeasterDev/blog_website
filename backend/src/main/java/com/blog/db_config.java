@@ -12,6 +12,9 @@ public class db_config {
     @Bean
     public DataSource gDataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+        System.out.print(System.getenv("JAWSDB_URL"));
+        System.out.print(System.getenv("JAWSDB_USERNAME"));
+        System.out.print(System.getenv("JAWSDB_PASSWORD"));
         dataSourceBuilder.url("jdbc:" + System.getenv("JAWSDB_URL"));
         dataSourceBuilder.username(System.getenv("JAWSDB_USERNAME"));
         dataSourceBuilder.password(System.getenv("JAWSDB_PASSWORD"));
