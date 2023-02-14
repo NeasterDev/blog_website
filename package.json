@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/crazypants300/blog_website/issues"
   },
-  "homepage": "https://github.com/crazypants300/blog_website#readme"
+  "homepage": "https://github.com/crazypants300/blog_website#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
 }

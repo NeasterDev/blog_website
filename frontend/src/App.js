@@ -28,7 +28,7 @@ class App extends React.Component {
   // login function
   onLogin = () => {
     // fetch the login route that spring security provides
-    fetch("http://localhost:8080/login", {
+    fetch("/login", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -63,7 +63,7 @@ class App extends React.Component {
   // saves a new user to the database
   onRegister = () => {
     // fetch request to save user to db
-    fetch("http://localhost:8080/api/user/register", {
+    fetch("/api/user/register", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json", // this header does not need the JWT
@@ -101,7 +101,7 @@ class App extends React.Component {
 
   // sets the token to token saved in local storage if there is one
   componentDidMount() {
-    fetch("http://localhost:8080/api/user/current", {
+    fetch("/api/user/current", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
