@@ -19,7 +19,7 @@ public class db_config {
         System.out.print(System.getenv("JAWSDB_URL"));
         System.out.print(System.getenv("JAWSDB_USERNAME"));
         System.out.print(System.getenv("JAWSDB_PASSWORD"));
-        dataSourceBuilder.url("jdbc:mysql://" + System.getenv("JAWSDB_URL"));
+        dataSourceBuilder.url("jdbc:" + System.getenv("JAWSDB_URL"));
         dataSourceBuilder.username(System.getenv("JAWSDB_USERNAME"));
         dataSourceBuilder.password(System.getenv("JAWSDB_PASSWORD"));
         return dataSourceBuilder.build();
